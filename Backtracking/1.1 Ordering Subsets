@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Custom compare func
+bool compareString(string a, string b)
+{
+    if (a.length() == b.length())
+    {
+        return a < b; // lexicographic
+    }
+    return a.length() < b.length();
+}
+
+void findsubsets(char *input, char *output, int i, int j, vector<string> &list)
+{
+    // base case
+    if (input[i] == '\0')
+    {
+        output[j] = '\0';
+        string temp(output);
+        list.push_back(temp);
+        return;
+    }
+
+    // rec case
+    // Include ith letter
+    output[j] = input[i];
+    findsubsets(input, output, i + 1, j + 1, list);
+
+    // Exclude ith letter
+    findsubsets(input, output, i + 1, j, list);
+}
+
+int main()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+    vector<string> list;
+    char input[100];
+    char output[100];
+    cin >> input;
+    findsubsets(input, output, 0, 0, list);
+    sort(list.begin(), list.end(), compareString);
+    for (string s : list)
+    {
+        cout << s << ",";
+    }
+    return 0;
+}
